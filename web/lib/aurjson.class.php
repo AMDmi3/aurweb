@@ -291,7 +291,10 @@ class AurJSON {
 			"UNION SELECT 'license' AS Type, Licenses.Name, '' AS Cond " .
 			"FROM Licenses INNER JOIN PackageLicenses " .
 			"ON PackageLicenses.PackageID = " . $pkgid . " " .
-			"AND PackageLicenses.LicenseID = Licenses.ID";
+			"AND PackageLicenses.LicenseID = Licenses.ID" .
+			"UNION SELECT 'source' AS Type, PackageSources.Source, '' AS Cond " .
+			"FROM PackageSources " .
+			"WHERE PackageSources.PackageID = " . $pkgid;
 		$result = $this->dbh->query($query);
 
 		if (!$result) {
@@ -308,6 +311,7 @@ class AurJSON {
 			'replaces' => 'Replaces',
 			'groups' => 'Groups',
 			'license' => 'License',
+			'source' => 'Sources',
 		);
 		$data = array();
 		while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
